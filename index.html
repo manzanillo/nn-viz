@@ -43,8 +43,8 @@
       }
 
       canvas.on("object:rotating", function(evt) {
-        evt.target.to.set("strokeWidth", 20)
-        evt.target.from.set("strokeWidth", 20)
+        console.log(evt)
+        evt.target.to.set("strokeWidth", 20 * (evt.target.angle / 360))
         canvas.renderAll()
       })
 
