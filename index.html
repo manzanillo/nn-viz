@@ -33,7 +33,7 @@
       }
 
       var canvas = new fabric.Canvas("canvas")
-
+      canvas.selection = false
       window.addEventListener("resize", resizeCanvas, false)
 
       function resizeCanvas() {
@@ -82,28 +82,13 @@
             layer2Index < layer2.length;
             layer2Index++
           ) {
-            let points = [
-              layer1[layer1Index].left,
-              layer1[layer1Index].top,
-              layer2[layer2Index].left,
-              layer2[layer2Index].top
-            ]
-
-            let line = new fabric.Line(points, {
-              strokeWidth: 3,
-              stroke: "black",
-              selectable: false
-            })
-            lines.push(line)
-            canvas.add(line)
-
             let knob = new fabric.Image(knobImgElement, {
               left:
                 layer1[layer1Index].left +
-                (layer2[layer2Index].left - layer1[layer1Index].left) / 2,
+                (layer2[layer2Index].left - layer1[layer1Index].left) * 0.8,
               top:
                 layer1[layer1Index].top +
-                (layer2[layer2Index].top - layer1[layer1Index].top) / 2,
+                (layer2[layer2Index].top - layer1[layer1Index].top) * 0.8,
               originX: "center",
               originY: "center"
             })
@@ -119,9 +104,39 @@
               mtr: true //the rotating point (defaut: true)
             })
             knob.lockMovementX = knob.lockMovementY = true
-            knob.scaleToWidth(canvas.height / 20)
-            knob.scaleToHeight(canvas.height / 20)
+            knob.scaleToWidth(canvas.height / 24)
+            knob.scaleToHeight(canvas.height / 24)
             knobs.push(knob)
+
+            let points1 = [
+              layer1[layer1Index].left,
+              layer1[layer1Index].top,
+              knob.left,
+              knob.top
+            ]
+            let points2 = [
+              knob.left,
+              knob.top,
+              layer2[layer2Index].left,
+              layer2[layer2Index].top
+            ]
+
+            let line1 = new fabric.Line(points1, {
+              strokeWidth: 10,
+              stroke: "black",
+              selectable: false
+            })
+            let line2 = new fabric.Line(points2, {
+              strokeWidth: 3,
+              stroke: "black",
+              selectable: false
+            })
+            lines.push({
+              to: line1,
+              from: line2
+            })
+            canvas.add(line1)
+            canvas.add(line2)
             canvas.add(knob)
           }
         }
