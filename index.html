@@ -42,6 +42,12 @@
         canvas.renderAll()
       }
 
+      canvas.on("object:rotating", function(evt) {
+        evt.target.to.set("strokeWidth", 20)
+        evt.target.from.set("strokeWidth", 20)
+        canvas.renderAll()
+      })
+
       // resize on init
       resizeCanvas()
 
@@ -124,11 +130,15 @@
             let line1 = new fabric.Line(points1, {
               strokeWidth: 10,
               stroke: "black",
+              originX: "center",
+              originY: "center",
               selectable: false
             })
             let line2 = new fabric.Line(points2, {
               strokeWidth: 3,
               stroke: "black",
+              originX: "center",
+              originY: "center",
               selectable: false
             })
             lines.push({
@@ -137,6 +147,8 @@
             })
             canvas.add(line1)
             canvas.add(line2)
+            knob["from"] = line1
+            knob["to"] = line2
             canvas.add(knob)
           }
         }
